@@ -1,0 +1,1 @@
+python manage.py migrate --noinput && gunicorn --bind 0.0.0.0:5000 -w 4 -k uvicorn.workers.UvicornWorker dtb.asgi:application && celery -A dtb worker -P prefork --loglevel=INFO  && celery -A dtb beat --loglevel=INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
