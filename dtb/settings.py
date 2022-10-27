@@ -18,10 +18,7 @@ if os.path.isfile(dotenv_file):
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv(
-    "DJANGO_SECRET_KEY",
-    'x%#3&%giwv8f0+%r946en7z&d@9*rc$sl0qoql56xr%bh^w2mj',
-)
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY")
 
 if os.environ.get('DJANGO_DEBUG', default=False) in ['True', 'true', '1', True]:
     DEBUG = True
@@ -45,7 +42,6 @@ INSTALLED_APPS = [
 
     # local apps
     'users.apps.UsersConfig',
-    'arcgis',
 ]
 
 MIDDLEWARE = [
@@ -101,6 +97,11 @@ DATABASES = {
     'default': dj_database_url.config(conn_max_age=600, default="sqlite:///db.sqlite3"),
 }
 
+database = dj_database_url.config(conn_max_age=500)
+
+DATABASES['default'].update(database)
+
+
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
@@ -140,7 +141,7 @@ STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
 
 # -----> CELERY
-REDIS_URL = os.getenv('REDIS_URL', 'redis://redis:6379')
+REDIS_URL = os.getenv('REDIS_URL')
 BROKER_URL = REDIS_URL
 CELERY_BROKER_URL = REDIS_URL
 CELERY_RESULT_BACKEND = REDIS_URL
